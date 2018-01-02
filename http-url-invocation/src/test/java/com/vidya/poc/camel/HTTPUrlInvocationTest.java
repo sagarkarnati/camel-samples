@@ -1,6 +1,5 @@
 package com.vidya.poc.camel;
 
-import org.apache.camel.CamelContext;
 import org.apache.camel.EndpointInject;
 import org.apache.camel.Produce;
 import org.apache.camel.ProducerTemplate;
@@ -26,24 +25,12 @@ public class HTTPUrlInvocationTest {
 
 	@Produce(uri = "direct:start")
 	private ProducerTemplate template;
-
-	@EndpointInject(uri = "mock:https://www.google.com/search?q=${body}")
-	private MockEndpoint resultEndPoint;
 	
 	@EndpointInject(uri = "mock:advised")
 	private MockEndpoint mockResultEndPoint;
 	
 	@Autowired
 	private ModelCamelContext modelCamelContext;
-
-	// This method invokes the URL when ever tests are run.
-	@Test
-	public void test_happy_path() throws Exception {
-		template.sendBody("Himalayas");
-
-		resultEndPoint.expectedMessageCount(1);
-		resultEndPoint.assertIsSatisfied();
-	}
 
 	// This method invokes the Mock end point URL when ever tests are run.
 	@Test
@@ -54,15 +41,13 @@ public class HTTPUrlInvocationTest {
 			public void configure() throws Exception {
 
 				// intercept sending to mock:foo and do something else
-				interceptSendToEndpoint("mock:https://www.google.com/search?q=${body}").skipSendToOriginalEndpoint().to("mock:advised");
+				interceptSendToEndpoint("https:*").skipSendToOriginalEndpoint().to("mock:advised");
 			}
 		});
 
 		template.sendBody("Himalayas");
 
-		resultEndPoint.expectedMessageCount(0);
 		mockResultEndPoint.expectedMessageCount(1);
-		resultEndPoint.assertIsSatisfied();
 		mockResultEndPoint.assertIsSatisfied();
 	}
 }
