@@ -12,6 +12,7 @@
 	<name>camel-cxf-rs-consumer</name>
 	<properties>
 		<cxf.version>3.1.12</cxf.version>
+		<jackson.version>1.9.13</jackson.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,12 +38,23 @@
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 			<version>${cxf.version}</version>
 		</dependency>
+		<!-- for JSON support in Apache-CXF Restful web service -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 
 		<!-- Tests -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.2</version>
 		</dependency>
 	</dependencies>
 </project>

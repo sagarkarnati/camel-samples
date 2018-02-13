@@ -1,6 +1,7 @@
 package com.vidya.poc.camel;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +13,12 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.vidya.poc.Application;
+import com.vidya.poc.pojo.Person;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, classes = Application.class)
 @AutoConfigureMockMvc
-public class CXFConsumerITest {
+public class PersonServiceConsumerITest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -24,7 +26,8 @@ public class CXFConsumerITest {
 	@Test
 	public void test_hapy_path() throws Exception {
 
-		String body = restTemplate.getForObject("/services/sayHello/a", String.class);
-		assertThat(body).isEqualTo("Setting reponse in the camel process");
+		Person body = restTemplate.getForObject("/services/person/1", Person.class);
+		assertThat(body).isExactlyInstanceOf(Person.class);
+		assertEquals(1, body.getId());
 	}
 }
